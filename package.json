@@ -1,0 +1,24 @@
+{
+  "name": "fe-reviewer",
+  "version": "1.0.0",
+  "description": "48-hour PhilNITS / ITPEC FE exam study site",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Speender/FE-Reviewer.git"
+  },
+  "keywords": ["philnits", "itpec", "fe-exam", "study"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Speender/FE-Reviewer/issues"
+  },
+  "homepage": "https://github.com/Speender/FE-Reviewer#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}

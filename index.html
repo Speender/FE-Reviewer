@@ -370,7 +370,7 @@ table.t td.c,table.t th.c{text-align:center}
     <div class="card next-step">
       <div class="eyebrow">Do this next</div>
       <h3 id="next-title">Take the diagnostic</h3>
-      <p class="small" id="next-body">16 questions across every topic. It shows where to spend your limited hours.</p>
+      <p class="small" id="next-body">20 questions across every topic. It shows where to spend your limited hours.</p>
       <button class="btn primary" id="next-btn">Start</button>
     </div>
   </div>
@@ -1464,13 +1464,673 @@ if (x > 12)
 endif</pre>`,
  ['A','AB','AC','ABC'],2,
  ['The second, separate if also runs.','elseif is skipped once the first branch is taken.','First chain prints A only; the separate if prints C.','B is in the same chain as A, so it is skipped.'],
- 'Same idea as official Subject B Q2.']
+ 'Same idea as official Subject B Q2.'],
+/* ===== EXTRA PRACTICE QUESTIONS ===== */
+/* HARDWARE & OS (more) */
+['hw9','hw','A CPU runs at 500 MHz and needs an average of 2 clock cycles per instruction. What is its performance in MIPS?',
+ ['125','250','500','1,000'],1,
+ ['That would be CPI = 4.','500 MHz ÷ 2 cycles = 250 million instructions per second = 250 MIPS.','That is the clock rate itself; it ignores CPI.','This multiplies by 2 instead of dividing.'],
+ 'MIPS = clock (MHz) ÷ CPI.'],
+['hw10','hw','Which of the following memories loses its contents when the power is turned off?',
+ ['ROM','Flash memory','DRAM','SSD'],2,
+ ['ROM is non-volatile.','Flash memory keeps data without power.','DRAM is volatile main memory and must be powered (and refreshed) to hold data.','SSDs are built from flash and are non-volatile.'],
+ 'Volatile: SRAM, DRAM. Non-volatile: ROM, flash, SSD, HDD.'],
+['hw11','hw','In virtual memory, what is a page fault?',
+ ['The CPU tries to use a page that is not currently in main memory','A page in cache is overwritten','A program divides by zero','The disk has no free space'],0,
+ ['The OS must load the page from disk (swap), then restart the instruction.','Cache replacement is a different mechanism.','That is a program interrupt.','Unrelated to paging.'],
+ 'Page fault = needed page not in RAM → load from disk.'],
+['hw12','hw','Which of the following is NOT a necessary condition for deadlock?',
+ ['Mutual exclusion','Hold and wait','Preemption of resources','Circular wait'],2,
+ ['Resources that cannot be shared are required for deadlock.','A process holds some resources while waiting for others.','Deadlock needs NO preemption — if resources could be taken away, the deadlock could be broken.','A cycle of processes each waiting for the next must exist.'],
+ 'Four conditions: mutual exclusion, hold & wait, NO preemption, circular wait.'],
+['hw13','hw','A binary semaphore is used to give exclusive access to a critical section. What is its correct initial value?',
+ ['0','1','2','−1'],1,
+ ['With 0, the very first P (wait) operation would block forever.','1 means one process may enter; P makes it 0 (locked), V makes it 1 again.','2 would allow two processes in at once.','Semaphore values used this way are never negative.'],
+ 'Mutex semaphore starts at 1; a counting semaphore starts at the number of resources.'],
+['hw14','hw','Two 2 TB disks are configured as RAID 1 (mirroring). What is the usable capacity?',
+ ['1 TB','2 TB','4 TB','0 TB'],1,
+ ['Mirroring does not halve a single disk.','Both disks hold the same data, so usable capacity equals ONE disk = 2 TB.','4 TB would be RAID 0 (striping, no redundancy).','Data is clearly stored, so capacity is not zero.'],
+ 'RAID 1 usable = capacity of one disk.'],
+['hw15','hw','Three components, each with availability 0.9, are connected in SERIES. What is the system availability?',
+ ['0.27','0.729','0.9','0.999'],1,
+ ['0.27 is 0.9 × 0.3 — wrong operation.','0.9 × 0.9 × 0.9 = 0.729 (all three must work).','A series system is never better than its weakest component.','0.999 is the PARALLEL result: 1 − 0.1³.'],
+ 'Series: multiply availabilities. Parallel: 1 − product of failure probabilities.'],
+['hw16','hw','Two identical units, each with availability 0.95, run in PARALLEL (the system works if either works). What is the system availability?',
+ ['0.9025','0.95','0.9975','1.9'],2,
+ ['0.9025 is the SERIES result (0.95²).','Redundancy must improve on a single unit.','1 − (1 − 0.95)² = 1 − 0.0025 = 0.9975.','Availability can never exceed 1.'],
+ 'Parallel = 1 − (failure probability)ⁿ.'],
+['hw17','hw','How many bytes can a 32-bit address bus address (one byte per address)?',
+ ['256 MB','1 GB','4 GB','32 GB'],2,
+ ['256 MB = 2²⁸ bytes (28 address lines).','1 GB = 2³⁰ bytes.','2³² = 4,294,967,296 bytes ≈ 4 GB.','32 GB would need 35 address lines.'],
+ 'n address lines → 2ⁿ locations.'],
+['hw18','hw','Which cache write policy writes data to BOTH the cache and main memory at the same time?',
+ ['Write-back','Write-through','Write-around','Write-protect'],1,
+ ['Write-back updates only the cache and writes memory later when the line is evicted.','Write-through keeps memory always up to date at the cost of slower writes.','Write-around bypasses the cache and writes straight to memory.','Not a cache policy.'],
+ 'Through = both now. Back = memory later.'],
+['hw19','hw','All processes arrive at time 0 with burst times 3, 6 and 3 ms. With Round Robin and a 3 ms time slice (order P1, P2, P3), what is the AVERAGE waiting time?',
+ ['2 ms','3 ms','4 ms','6 ms'],2,
+ ['Too low — P2 and P3 both wait 6 ms.','Check the finish times again.','Gantt: P1 0–3, P2 3–6, P3 6–9, P2 9–12. Waiting = finish − burst: P1 0, P2 12 − 6 = 6, P3 9 − 3 = 6 → 12 ÷ 3 = 4 ms.','6 ms is the waiting time of a single process, not the average.'],
+ 'Waiting time = finish time − burst time (all arrive at 0).'],
+['hw20','hw','All processes arrive at time 0 with burst times 6, 2 and 4 ms. What is the average waiting time under non-preemptive SJF?',
+ ['2.00 ms','2.67 ms','4.00 ms','4.67 ms'],1,
+ ['Check the order of execution: 2, 4, 6.','Order 2 → 4 → 6; waits are 0, 2 and 6 → 8 ÷ 3 ≈ 2.67 ms.','That is the mean burst time, not the waiting time.','That is FCFS in the order 6, 2, 4: (0 + 6 + 8) ÷ 3.'],
+ 'SJF: sort by burst, accumulate the waits.'],
+['hw21','hw','With 4 KB pages (4,096 bytes), a logical address 10,000 is in which page, at what offset? (pages numbered from 0)',
+ ['Page 1, offset 5,904','Page 2, offset 1,808','Page 2, offset 2,000','Page 3, offset 0'],1,
+ ['An offset can never be as large as the page size.','10,000 ÷ 4,096 = 2 remainder 1,808.','2 × 4,096 = 8,192, and 10,000 − 8,192 = 1,808, not 2,000.','Page 3 would start at address 12,288.'],
+ 'Page = address ÷ page size; offset = remainder.'],
+['hw22','hw','Which statement about an SSD compared with an HDD is correct?',
+ ['It has moving platters and a head','It has no mechanical parts and much faster random access','It is volatile storage','It always has a lower cost per GB'],1,
+ ['That describes an HDD.','Flash memory has no seek time, so random reads are very fast and it is shock resistant.','SSD data survives power loss (non-volatile).','HDDs are still usually cheaper per GB.'],
+ 'SSD = flash, no seek time.'],
+/* NUMBERS & LOGIC (more) */
+['m9','math','What is the binary sum 1011 + 0110?',
+ ['10001','10011','1111','11001'],0,
+ ['11 + 6 = 17 = 10001₂.','That equals 19.','That equals 15 — it is 1011 + 0100.','That equals 25.'],
+ 'Convert to decimal to double-check a binary addition.'],
+['m10','math','What is decimal 45 in binary?',
+ ['101101','110101','101011','100111'],0,
+ ['32 + 8 + 4 + 1 = 45 → 101101.','That is 53.','That is 43.','That is 39.'],
+ 'Subtract powers of two: 32, 16, 8, 4, 2, 1.'],
+['m11','math','What is hexadecimal 2A in binary?',
+ ['00101010','10100010','00100110','01010010'],0,
+ ['2 = 0010, A (10) = 1010 → 0010 1010.','The two nibbles are swapped (A2).','1010 is A, not 0110 (6).','That is hexadecimal 52.'],
+ 'One hex digit = 4 bits.'],
+['m12','math','What range of integers can 8-bit two\'s complement represent?',
+ ['0 to 255','−127 to +127','−128 to +127','−256 to +255'],2,
+ ['That is unsigned 8-bit.','That is sign-magnitude (two zeros waste one pattern).','One extra negative value: −2⁷ … 2⁷ − 1.','That needs 9 bits.'],
+ 'n-bit two\'s complement: −2ⁿ⁻¹ … 2ⁿ⁻¹ − 1.'],
+['m13','math','What decimal value does 10000001 represent in 8-bit two\'s complement?',
+ ['−1','−127','−129','129'],1,
+ ['−1 is 11111111.','Invert → 01111110, add 1 → 01111111 = 127, so the value is −127.','That does not fit in 8 bits.','That is the UNSIGNED reading.'],
+ 'Negative: invert, add 1, then put the minus sign.'],
+['m14','math','What is the result of A XOR A for any bit A?',
+ ['A','0','1','NOT A'],1,
+ ['XOR gives 1 only when the inputs differ.','Both inputs are identical, so the output is always 0.','That would require different inputs.','Only if the second input were NOT A.'],
+ 'XOR with itself = 0 (used to clear a register).'],
+['m15','math','Simplify the Boolean expression A + A·B.',
+ ['A','B','A + B','A·B'],0,
+ ['Absorption law: A + A·B = A(1 + B) = A.','Fails for A = 1, B = 0 (original gives 1, this gives 0).','Fails for A = 0, B = 1 (original gives 0, this gives 1).','Fails for A = 1, B = 0 (original gives 1, this gives 0).'],
+ 'Absorption: A + AB = A.'],
+['m16','math','A fair coin is tossed 3 times. What is the probability of exactly 2 heads?',
+ ['1/8','1/4','3/8','1/2'],2,
+ ['That is exactly 3 heads (or exactly 0).','Too small — 3 of the 8 outcomes qualify.','HHT, HTH, THH = 3 of 8 outcomes → 3/8.','That would be 4 of 8 outcomes.'],
+ 'List the outcomes or use 3C2 ÷ 2³.'],
+['m17','math','For the data 2, 3, 3, 4, 8, what is the MEDIAN?',
+ ['3','4','3.5','8'],0,
+ ['The middle (3rd) value of the sorted list is 3.','4 is the MEAN: 20 ÷ 5.','There is an odd number of values, so no averaging of two middle values is needed.','8 is the maximum.'],
+ 'Median = middle of the sorted data; mean = sum ÷ count.'],
+['m18','math','In how many different orders can 4 people stand in a line?',
+ ['12','16','24','64'],2,
+ ['That is 4P2.','That is 4² (choices with repetition).','4! = 4 × 3 × 2 × 1 = 24.','That is 4³.'],
+ 'Arrangements of n distinct items = n!.'],
+['m19','math','An image has 10 pixels, each stored with 24-bit colour. How many bytes are needed?',
+ ['24','30','80','240'],1,
+ ['That is the bit size of ONE pixel; it ignores the other nine.','10 × 24 bits = 240 bits ÷ 8 = 30 bytes.','Mixed up bits and bytes.','That is the number of BITS.'],
+ 'bytes = bits ÷ 8.'],
+['m20','math','The 7-bit data 1101011 uses EVEN parity. What should the parity bit be?',
+ ['0','1','2','It cannot be determined'],1,
+ ['The data already has five 1s (odd), so 0 would leave the total odd.','Five 1s + one parity 1 = six 1s, which is even.','A parity bit is a single bit: 0 or 1.','Parity is fully determined by the data.'],
+ 'Even parity: total number of 1s (data + parity) must be even.'],
+['m21','math','Audio is sampled at 8,000 samples per second, 8 bits per sample, mono. How many bytes does 1 second take?',
+ ['8,000','16,000','64,000','8'],0,
+ ['8,000 samples × 1 byte = 8,000 bytes.','That would be 16-bit samples.','That is the number of BITS per second.','Forgot the sampling rate.'],
+ 'Data size = rate × bits ÷ 8 × time.'],
+['m22','math','Which gate outputs 1 ONLY when both of its inputs are 0?',
+ ['NAND','NOR','XOR','AND'],1,
+ ['NAND outputs 0 only when both inputs are 1.','NOR = NOT (A OR B): 1 only for 00.','XOR outputs 1 when the inputs differ.','AND outputs 1 only for 11.'],
+ 'NOR = "neither".'],
+/* ALGORITHMS (more) */
+['al9','algo','Which sorting algorithm has O(n log n) time complexity even in the WORST case?',
+ ['Bubble sort','Quick sort','Merge sort','Insertion sort'],2,
+ ['Bubble sort is O(n²).','Quick sort averages O(n log n) but degrades to O(n²) with bad pivots.','Merge sort always splits in half and merges in linear time → O(n log n).','Insertion sort is O(n²) in the worst case.'],
+ 'Worst-case n log n: merge sort and heap sort.'],
+['al10','algo','What is the time complexity of inserting a new element at the HEAD of a singly linked list?',
+ ['O(1)','O(log n)','O(n)','O(n²)'],0,
+ ['Create a node, point it at the old head, update the head pointer — a fixed number of steps.','That is a balanced-tree operation.','Inserting at the TAIL without a tail pointer needs O(n).','No simple list operation costs this much.'],
+ 'Linked list: insert at head O(1); search O(n).'],
+['al11','algo','In a MAX-heap, where is the largest element?',
+ ['At the root','At a leaf','At the last array position','In the left subtree only'],0,
+ ['Every parent is ≥ its children, so the root is the maximum.','Leaves hold smaller values in a max-heap.','The last array position is a leaf.','The maximum is at the root, not in either subtree.'],
+ 'Heap: root = max (max-heap) or min (min-heap).'],
+['al12','algo','A binary tree has root A with children B (left) and C (right); B has children D (left) and E (right). What is its POST-order traversal?',
+ ['A B D E C','D B E A C','D E B C A','A B C D E'],2,
+ ['That is pre-order.','That is in-order.','Post-order = left, right, node: D E B, then C, then A.','That is level-order.'],
+ 'Pre: root first. In: root in the middle. Post: root last.'],
+['al13','algo','On an empty queue: enqueue 1, enqueue 2, enqueue 3, dequeue, enqueue 4, dequeue, dequeue. What values were dequeued, in order?',
+ ['1, 2, 3','3, 2, 1','1, 3, 2','4, 3, 2'],0,
+ ['FIFO: the oldest items come out first → 1, 2, 3 (4 is still waiting).','That is stack (LIFO) behaviour.','Removal always follows the order of insertion.','4 was enqueued after 1, 2 and 3.'],
+ 'Queue = first in, first out.'],
+['al14','algo','About how many comparisons does selection sort make for n = 6 elements?',
+ ['6','15','21','36'],1,
+ ['Far too few for a full sort.','5 + 4 + 3 + 2 + 1 = 15 = n(n − 1) ÷ 2.','That is n(n + 1) ÷ 2.','That is n².'],
+ 'Selection sort always makes n(n − 1)/2 comparisons.'],
+['al15','algo','Binary search for 23 in the sorted array {2, 5, 8, 12, 16, 23, 38} (positions 1–7; middle = integer part of (low + high) ÷ 2). How many elements are compared with 23?',
+ ['1','2','3','6'],1,
+ ['The first middle element is 12, not 23.','Middle of 1–7 is position 4 (12); 23 > 12 → search 5–7, middle position 6 (23) → found. 2 comparisons.','Searching for 38 would take 3 comparisons, but not 23.','Linear search would need 6.'],
+ 'Halve the range each time; 7 elements need at most 3 comparisons.'],
+['al16','algo','Hash table with h(k) = k mod 5 and LINEAR PROBING (try the next slot on collision). Keys 12, 22, 7 are inserted in that order. In which slot does 7 end up?',
+ ['2','3','4','0'],2,
+ ['12 occupies slot 2.','22 mod 5 = 2 collides with 12 and moves to slot 3.','7 mod 5 = 2 → slot 2 taken, slot 3 taken, slot 4 is free.','Probing moves forward from slot 2; slot 0 is not reached first.'],
+ 'Linear probing: h, h+1, h+2, … until a free slot.'],
+['al17','algo','Dijkstra\'s algorithm is used to solve which problem?',
+ ['Minimum spanning tree','Shortest path from one vertex to the others','Topological ordering','Maximum flow'],1,
+ ['That is Prim\'s or Kruskal\'s algorithm.','It repeatedly settles the nearest unvisited vertex (non-negative edge weights).','Topological sort orders a directed acyclic graph.','That is done by Ford–Fulkerson style algorithms.'],
+ 'Dijkstra = single-source shortest path.'],
+['al18','algo','The Fibonacci sequence is F(1) = 1, F(2) = 1, F(n) = F(n − 1) + F(n − 2). What is F(6)?',
+ ['5','8','13','21'],1,
+ ['That is F(5).','1, 1, 2, 3, 5, 8 → F(6) = 8.','That is F(7).','That is F(8).'],
+ 'Write the sequence out; do not recurse in your head.'],
+['al19','algo','A recursive function crashes with a "stack overflow" error. What is the MOST likely cause?',
+ ['A missing or unreachable base case','Using too few variables','Passing arguments by value','Using integers instead of reals'],0,
+ ['Without a stopping condition the calls never end and the call stack fills up.','Variable count is not the cause.','Pass-by-value does not cause infinite recursion.','Data type choice is unrelated.'],
+ 'Recursion needs a base case that is always eventually reached.'],
+['al20','algo','What is the prefix (Polish) form of a × (b + c)?',
+ ['× a + b c','a × + b c','+ × a b c','× + a b c'],0,
+ ['The × is applied last: × a (+ b c).','Operators and operands are mixed in no valid order.','That is (a × b) + c.','That is (a + b) × c.'],
+ 'Prefix: find the last-applied operator and put it first.'],
+['al21','algo','How many nodes does a FULL binary tree with 4 levels have (every level completely filled)?',
+ ['8','15','16','31'],1,
+ ['That is only the bottom level (leaves).','1 + 2 + 4 + 8 = 15 = 2⁴ − 1.','2⁴ counts one level too many.','That is a 5-level tree.'],
+ 'Full tree with k levels = 2ᵏ − 1 nodes.'],
+/* DATABASES (more) */
+['db8','db','Which SQL keyword removes duplicate rows from a query result?',
+ ['UNIQUE','DISTINCT','GROUP','ONLY'],1,
+ ['UNIQUE is a constraint, not a SELECT modifier.','SELECT DISTINCT returns each different row once.','GROUP BY groups rows for aggregation; it is a different clause.','Not an SQL keyword for this.'],
+ 'SELECT DISTINCT col FROM t.'],
+['db9','db','Which statement removes the table STRUCTURE (definition) as well as all its data?',
+ ['DELETE FROM emp','TRUNCATE TABLE emp','DROP TABLE emp','UPDATE emp SET x = NULL'],2,
+ ['DELETE removes rows only; the table remains.','TRUNCATE empties all rows but keeps the table definition.','DROP TABLE deletes the table completely.','UPDATE changes values only.'],
+ 'DELETE/TRUNCATE = data; DROP = data + structure.'],
+['db10','db','What is the main purpose of a FOREIGN KEY?',
+ ['To speed up searches','To enforce referential integrity between tables','To make a column unique','To encrypt data'],1,
+ ['That is an index.','Every foreign key value must exist as a key in the referenced table (or be NULL).','That is a UNIQUE constraint or primary key.','Unrelated to encryption.'],
+ 'Foreign key = link + referential integrity.'],
+['db11','db','The salary column holds 100, 200 and NULL. What does SELECT AVG(salary) return?',
+ ['100','150','200','NULL'],1,
+ ['This treats NULL as 0: 300 ÷ 3.','Aggregate functions ignore NULL: (100 + 200) ÷ 2 = 150.','That is the maximum.','AVG returns NULL only when ALL values are NULL.'],
+ 'Aggregates ignore NULL (except COUNT(*)).'],
+['db12','db','What is the trade-off of adding an index to a column?',
+ ['Faster searches, slower inserts/updates and more storage','Slower searches, faster updates','No effect on speed','It removes duplicates'],0,
+ ['The index must be maintained on every change, but lookups avoid full scans.','Backwards.','Indexes are chosen exactly because they change search speed.','That requires DISTINCT or a unique constraint.'],
+ 'Index: reads faster, writes slower.'],
+['db13','db','Which of the following is a DDL (Data Definition Language) statement?',
+ ['SELECT','INSERT','CREATE TABLE','COMMIT'],2,
+ ['SELECT is DML (query).','INSERT is DML.','CREATE, ALTER and DROP define structure → DDL.','COMMIT is transaction control (TCL).'],
+ 'DDL: CREATE/ALTER/DROP. DML: SELECT/INSERT/UPDATE/DELETE.'],
+['db14','db','Transaction T1 waits for a lock held by T2, while T2 waits for a lock held by T1. What is this situation called?',
+ ['Rollback','Deadlock','Checkpoint','Phantom read'],1,
+ ['Rollback undoes a transaction.','Circular waiting for each other\'s locks = deadlock; the DBMS aborts one transaction.','A checkpoint is a recovery sync point.','A phantom read is an anomaly where new rows appear between reads.'],
+ 'Deadlock = circular lock wait.'],
+['db15','db','How is a MANY-TO-MANY relationship between Student and Course normally implemented in a relational database?',
+ ['A foreign key in Student','A foreign key in Course','A separate linking (junction) table','A single combined column'],2,
+ ['That would allow each student only one course.','That would allow each course only one student.','A table such as Enrollment(StudentID, CourseID) holds the pairs.','Repeating values in one column violates 1NF.'],
+ 'Many-to-many → junction table.'],
+['db16','db','Employee(EmpID, DeptID, DeptName) has the single-column key EmpID, with EmpID → DeptID and DeptID → DeptName. Which normal form is violated?',
+ ['1NF','2NF','3NF','No violation'],2,
+ ['All values are atomic.','The key is a single column, so a partial dependency is impossible.','DeptName depends on EmpID only through DeptID — a transitive dependency violates 3NF.','There is a clear transitive dependency.'],
+ 'Transitive dependency → split into Employee and Department.'],
+['db17','db','Transaction B reads a value that transaction A has changed but not yet committed. What is this anomaly?',
+ ['Lost update','Dirty read','Phantom read','Deadlock'],1,
+ ['Lost update: two writers overwrite each other.','Reading uncommitted data = dirty read (A may still roll back).','Phantom read: a repeated query finds NEW rows.','Deadlock is a circular wait.'],
+ 'Dirty = uncommitted.'],
+['db18','db','Table A has 3 rows and table B has 4 rows. How many rows does A CROSS JOIN B return?',
+ ['7','12','4','3'],1,
+ ['Adding the counts is wrong.','Every row of A pairs with every row of B: 3 × 4 = 12.','That is the row count of B.','That is the row count of A.'],
+ 'Cartesian product = rows(A) × rows(B).'],
+['db19','db','What is the difference between UNION and UNION ALL?',
+ ['UNION removes duplicate rows; UNION ALL keeps them','UNION ALL removes duplicate rows; UNION keeps them','UNION works on columns, UNION ALL on rows','There is no difference'],0,
+ ['UNION eliminates duplicates; UNION ALL is faster because it does not.','Backwards.','Both combine the rows of two queries.','The duplicate handling differs.'],
+ 'UNION = distinct set union. UNION ALL = simply append.'],
+['db20','db','In relational algebra, which operation extracts specified COLUMNS from a relation?',
+ ['Selection','Projection','Join','Division'],1,
+ ['Selection picks ROWS satisfying a condition.','Projection keeps only the chosen attributes (columns).','Join combines two relations.','Division answers "for all" queries.'],
+ 'Selection = rows (WHERE). Projection = columns (SELECT list).'],
+/* NETWORKING (more) */
+['n8','net','Which well-known port number does HTTPS use by default?',
+ ['80','443','25','22'],1,
+ ['80 is plain HTTP.','HTTPS = HTTP over TLS on port 443.','25 is SMTP.','22 is SSH.'],
+ 'HTTP 80 · HTTPS 443 · SSH 22 · SMTP 25 · DNS 53.'],
+['n9','net','Which protocol does a mail client use to RETRIEVE messages from a mail server (downloading them)?',
+ ['SMTP','POP3','FTP','SNMP'],1,
+ ['SMTP SENDS mail from clients and between servers.','POP3 (and IMAP) fetch mail from the mailbox.','FTP transfers files.','SNMP manages network devices.'],
+ 'Send = SMTP. Receive = POP3 / IMAP.'],
+['n10','net','How many usable host addresses are there in a /28 IPv4 subnet?',
+ ['14','16','30','62'],0,
+ ['32 − 28 = 4 host bits → 2⁴ − 2 = 14.','16 includes the network and broadcast addresses.','That is /27.','That is /26.'],
+ 'Hosts = 2^(32 − prefix) − 2.'],
+['n11','net','Which of these is a PRIVATE IPv4 address?',
+ ['172.32.0.1','192.168.5.4','11.0.0.1','169.254.1.1'],1,
+ ['The private range is 172.16.0.0 – 172.31.255.255; 172.32 is outside it.','192.168.0.0/16 is a private range.','11.0.0.0 is a public range.','169.254.x.x is link-local (APIPA), not a private range.'],
+ 'Private: 10/8, 172.16/12, 192.168/16.'],
+['n12','net','A layer-2 switch forwards frames mainly based on which address?',
+ ['IP address','MAC address','Port number','URL'],1,
+ ['IP addresses are used by routers (layer 3).','Switches learn which MAC address is behind each port.','Port numbers are used by transport protocols and firewalls.','URLs are application-layer.'],
+ 'Switch → MAC (L2). Router → IP (L3).'],
+['n13','net','What is the correct order of the TCP three-way handshake?',
+ ['SYN, ACK, SYN-ACK','SYN, SYN-ACK, ACK','ACK, SYN, FIN','SYN, FIN, ACK'],1,
+ ['The server replies with a combined SYN-ACK before the final ACK.','Client SYN → server SYN-ACK → client ACK.','FIN is used to close a connection.','FIN is not part of connection setup.'],
+ 'SYN → SYN-ACK → ACK.'],
+['n14','net','How long is an IPv6 address?',
+ ['32 bits','64 bits','128 bits','256 bits'],2,
+ ['That is IPv4.','IPv6 interface identifiers are 64 bits, but the whole address is longer.','IPv6 addresses are 128 bits (eight groups of 16 bits).','Longer than any standard address.'],
+ 'IPv4 = 32 bits, IPv6 = 128 bits.'],
+['n15','net','Which medium access method do wireless LANs (Wi-Fi) use to AVOID collisions?',
+ ['CSMA/CD','CSMA/CA','Token passing','TDMA only'],1,
+ ['Collision detection was used in classic wired Ethernet.','Wi-Fi nodes cannot listen while sending, so they avoid collisions (CSMA/CA).','Token ring uses token passing.','Not the Wi-Fi access method.'],
+ 'Old Ethernet CD = Detection. Wi-Fi CA = Avoidance.'],
+['n16','net','A 1 GB file (1 GB = 10⁹ bytes) is sent over a 1 Gbps line with 50% transmission efficiency. About how long does it take?',
+ ['4 s','8 s','16 s','32 s'],2,
+ ['Used 2 Gbps effective speed.','That ignores the 50% efficiency.','1 GB = 8 Gbit; effective speed = 0.5 Gbps; 8 ÷ 0.5 = 16 s.','That would need 25% efficiency.'],
+ 'Time = bytes × 8 ÷ (speed × efficiency).'],
+['n17','net','Which protocol provides an encrypted remote login and replaces the insecure Telnet?',
+ ['SSH','FTP','TFTP','SNMP'],0,
+ ['Secure Shell encrypts the whole session.','FTP transfers files (unencrypted).','TFTP is a simple file transfer protocol.','SNMP manages network devices.'],
+ 'Telnet (plain text) → SSH (encrypted).'],
+['n18','net','What is the main purpose of a VLAN?',
+ ['To encrypt traffic between sites','To divide one physical switch network into separate logical broadcast domains','To translate private to global addresses','To assign IP addresses automatically'],1,
+ ['That is a VPN.','VLANs separate groups of hosts logically without separate hardware.','That is NAT.','That is DHCP.'],
+ 'VLAN = logical LAN; VPN = encrypted tunnel.'],
+['n19','net','Which device converts protocols and connects networks that use completely different architectures?',
+ ['Repeater','Bridge','Router','Gateway'],3,
+ ['A repeater just regenerates signals (layer 1).','A bridge links LAN segments at layer 2.','A router forwards between IP networks but expects the same protocol family.','A gateway translates between different protocol stacks, up to the application layer.'],
+ 'Repeater L1 · Bridge/Switch L2 · Router L3 · Gateway L4–7.'],
+['n20','net','Which DNS record type identifies the mail server of a domain?',
+ ['A','MX','CNAME','NS'],1,
+ ['A maps a name to an IPv4 address.','MX = Mail eXchanger.','CNAME is an alias for another name.','NS names the authoritative name servers.'],
+ 'A/AAAA = address, MX = mail, NS = name server, CNAME = alias.'],
+['n21','net','What is the broadcast address of the network 192.168.1.0/24?',
+ ['192.168.1.1','192.168.1.254','192.168.1.255','255.255.255.255'],2,
+ ['That is the first usable host.','That is the last usable host.','All host bits set to 1 → 192.168.1.255.','That is the limited broadcast, not the directed broadcast of this subnet.'],
+ 'Broadcast = network address with all host bits set to 1.'],
+/* SECURITY (more) */
+['s9','sec','Which of the following is a SYMMETRIC (shared-key) encryption algorithm?',
+ ['RSA','AES','ECDSA','DSA'],1,
+ ['RSA is asymmetric.','AES uses the same key to encrypt and decrypt.','ECDSA is an elliptic-curve signature algorithm (asymmetric).','DSA is an asymmetric signature algorithm.'],
+ 'Symmetric: AES, DES. Asymmetric: RSA, ECC.'],
+['s10','sec','A software vendor publishes a SHA-256 hash next to its download. Which security property can users check with it?',
+ ['Confidentiality','Integrity','Availability','Anonymity'],1,
+ ['A hash does not hide the file.','If the computed hash matches, the file was not altered.','Availability concerns access to the service.','Hashes do not provide anonymity.'],
+ 'Hash → integrity check.'],
+['s11','sec','An e-mail pretending to be from a bank leads users to a fake login page to steal their credentials. This attack is called:',
+ ['Phishing','Keylogging','Sniffing','Replay attack'],0,
+ ['Fraudulent messages that lure people to fake sites = phishing.','Keyloggers record keystrokes locally.','Sniffing captures network traffic.','A replay attack resends captured valid data.'],
+ 'Phishing = lure by message.'],
+['s12','sec','An attacker uses thousands of compromised computers (a botnet) to flood a web server with requests so that real users cannot reach it. This is a:',
+ ['DDoS attack','SQL injection','Man-in-the-middle attack','Brute force attack'],0,
+ ['Distributed Denial of Service — availability is attacked.','SQL injection attacks the database through input.','MITM intercepts communications.','Brute force guesses credentials.'],
+ 'DoS/DDoS → availability.'],
+['s13','sec','Which combination is a true example of MULTI-FACTOR authentication?',
+ ['Password and PIN','Fingerprint and iris scan','Password and a one-time code from a phone app','Two security questions'],2,
+ ['Both are knowledge factors.','Both are biometric (inherence) factors.','Something you know + something you have = two different factor types.','Both are knowledge factors.'],
+ 'Factors: know, have, are. Need two DIFFERENT types.'],
+['s14','sec','Encrypting the files stored on a laptop mainly protects which property if the laptop is stolen?',
+ ['Availability','Confidentiality','Accountability','Integrity only'],1,
+ ['The thief still has the laptop; availability is not protected.','Without the key the thief cannot read the data.','Accountability needs logs and identification.','Encryption alone does not prove files were not changed.'],
+ 'Encryption → confidentiality.'],
+['s15','sec','What does a digital certificate issued by a certificate authority (CA) prove?',
+ ['The owner\'s private key','That a public key belongs to the named owner','That the website has no malware','That all data is encrypted'],1,
+ ['Private keys are never shared or certified.','The CA signs the binding of identity ↔ public key.','A certificate says nothing about malware.','Encryption is done by TLS; the certificate supports authentication.'],
+ 'Certificate = identity + public key, signed by a CA.'],
+['s16','sec','Which attack injects a malicious script into a web page so that it runs in OTHER users\' browsers?',
+ ['SQL injection','Cross-site scripting (XSS)','Buffer overflow','Directory traversal'],1,
+ ['SQL injection targets the database.','XSS: unescaped input is returned to other users as script. Fix: output escaping.','Buffer overflow overruns memory.','Directory traversal reads files outside the web root.'],
+ 'XSS → escape output; SQLi → placeholders.'],
+['s17','sec','What is the main difference between an IDS and an IPS?',
+ ['An IDS only detects and alerts; an IPS can also block the attack','An IPS only logs; an IDS blocks','They are identical','An IDS encrypts traffic'],0,
+ ['An Intrusion Prevention System sits inline and drops malicious traffic.','Backwards.','Prevention vs detection is the difference.','Neither encrypts traffic.'],
+ 'D = Detection, P = Prevention.'],
+['s18','sec','The employee who registers payments in a system must not be the same person who approves them. Which principle is this?',
+ ['Least privilege','Separation (segregation) of duties','Defence in depth','Need to know only'],1,
+ ['Least privilege limits rights to what is needed for the job.','Splitting a critical process between people prevents single-person fraud.','Defence in depth layers several controls.','Need to know limits information access.'],
+ 'Two people for risky steps.'],
+['s19','sec','Which measure is MOST effective for recovering from a ransomware infection?',
+ ['A longer password policy','Regular offline (disconnected) backups','A stronger Wi-Fi password','Disabling the screen saver'],1,
+ ['Passwords do not restore encrypted files.','Clean backups that malware could not reach allow files to be restored without paying.','Wi-Fi password strength does not help recovery.','Unrelated.'],
+ 'Ransomware recovery = offline backups.'],
+['s20','sec','Which wireless LAN security protocol is considered broken and should NOT be used?',
+ ['WEP','WPA2','WPA3','802.1X with WPA2-Enterprise'],0,
+ ['WEP\'s key weaknesses allow it to be cracked in minutes.','WPA2 is widely used and acceptable with a strong passphrase.','WPA3 is the current recommendation.','Enterprise authentication is considered strong.'],
+ 'WEP broken → WPA2 → WPA3.'],
+['s21','sec','Input longer than the reserved area overwrites neighbouring memory and may let an attacker run code. What is this vulnerability?',
+ ['Buffer overflow','Cross-site request forgery','Session fixation','DNS cache poisoning'],0,
+ ['Writing past the end of a buffer = buffer overflow. Fix: bounds checking.','CSRF tricks a logged-in browser into sending requests.','Session fixation forces a known session ID.','DNS poisoning inserts false DNS records.'],
+ 'Buffer overflow → check input length.'],
+/* SOFTWARE ENGINEERING (more) */
+['d8','dev','Which test coverage criterion requires every decision (if/while) to be evaluated as both TRUE and FALSE at least once?',
+ ['Statement coverage','Decision (branch) coverage','Requirements coverage','Load coverage'],1,
+ ['Statement coverage only needs every line to run once.','Branch coverage covers both outcomes of each decision.','Not a white-box criterion.','Load is performance testing.'],
+ 'Statement coverage is the weakest; branch coverage is stronger.'],
+['d9','dev','Which design pattern ensures that a class has only ONE instance and gives global access to it?',
+ ['Factory','Singleton','Observer','Adapter'],1,
+ ['Factory encapsulates object creation.','Singleton restricts instantiation to one object.','Observer notifies dependents of changes.','Adapter converts one interface into another.'],
+ 'Singleton = one instance.'],
+['d10','dev','In the Observer pattern, what happens when the subject\'s state changes?',
+ ['All registered observers are notified','The subject is deleted','Only the first observer is notified','The observers change the subject\'s class'],0,
+ ['The subject keeps a list of observers and notifies each of them (publish/subscribe).','Nothing is deleted.','Notification goes to all registered observers, not just one.','Classes are not modified.'],
+ 'Observer = one-to-many notification.'],
+['d11','dev','In Scrum, who is responsible for maximising the value of the product and managing the product backlog?',
+ ['Scrum Master','Product Owner','Development team','Stakeholder'],1,
+ ['The Scrum Master facilitates the process and removes impediments.','The Product Owner orders and owns the backlog.','Developers build the increment.','Stakeholders give input but do not own the backlog.'],
+ 'PO = what/value. SM = how Scrum is followed. Team = build.'],
+['d12','dev','In a UML class diagram, which relationship expresses "is-a" (inheritance)?',
+ ['Association','Aggregation','Generalization','Dependency'],2,
+ ['Association is a general "uses/knows" link.','Aggregation is "has-a" (whole–part).','Generalization (subclass → superclass) = is-a.','Dependency is a weak "uses temporarily" relation.'],
+ 'Is-a = generalization; has-a = aggregation/composition.'],
+['d13','dev','What is the usual order of test levels, from the smallest unit to the user?',
+ ['Unit → integration → system → acceptance','System → unit → integration → acceptance','Acceptance → system → integration → unit','Integration → unit → acceptance → system'],0,
+ ['Test modules first, then their interfaces, then the whole system, then user acceptance.','System tests need tested modules first.','Acceptance testing comes last.','Units must be tested before their integration.'],
+ 'Small → big: unit, integration, system, acceptance.'],
+['d14','dev','Which technique examines code or documents WITHOUT executing the program?',
+ ['Code review / inspection','Load test','Regression test','Black-box test'],0,
+ ['Static review finds defects by reading.','Load testing runs the system under load.','Regression testing re-runs tests.','Black-box tests execute the program with inputs.'],
+ 'Static = no execution. Dynamic = run it.'],
+['d15','dev','The requirement "the search result must appear within 2 seconds" is classified as:',
+ ['A functional requirement','A non-functional (performance) requirement','A business rule','A test case'],1,
+ ['Functional requirements say WHAT the system does.','Non-functional requirements describe quality attributes such as performance.','A business rule is a policy of the organisation.','A test case verifies a requirement; it is not one.'],
+ 'Functional = what. Non-functional = how well.'],
+['d16','dev','A function contains 3 independent if statements and no loops. What is its cyclomatic complexity?',
+ ['3','4','6','8'],1,
+ ['Decisions + 1, not just decisions.','Number of decision points + 1 = 3 + 1 = 4.','That is more than the number of linearly independent paths.','That is 2³, the number of path combinations, not the complexity.'],
+ 'Cyclomatic complexity = decisions + 1.'],
+['d17','dev','A form accepts ages 18 to 65. With equivalence partitioning, how many equivalence classes should you test?',
+ ['1','2','3','4'],2,
+ ['That would test only the valid class.','Two classes would miss one of the invalid sides.','One valid class (18–65) and two invalid classes (below 18, above 65).','There are only three meaningful classes here.'],
+ 'Valid range → 1 valid + 2 invalid classes.'],
+['d18','dev','Which development model pairs every development phase with a corresponding test phase?',
+ ['Waterfall only','V-model','Spiral','Prototyping'],1,
+ ['Classic waterfall puts testing late and is not defined by pairing.','V-model: requirements ↔ acceptance test, design ↔ system test, and so on.','Spiral iterates around risk analysis.','Prototyping builds trial versions.'],
+ 'V-model = each left-side phase has a right-side test.'],
+['d19','dev','What is refactoring?',
+ ['Adding new features to software','Improving the internal structure of code without changing its external behaviour','Rewriting software in another language','Fixing bugs reported by users'],1,
+ ['That is enhancement (perfective maintenance).','Behaviour stays the same; readability and maintainability improve.','That is porting or rewriting.','That is corrective maintenance.'],
+ 'Refactor = same behaviour, cleaner code.'],
+['d20','dev','Two modules communicate by reading and writing the same GLOBAL variable. What type of coupling is this?',
+ ['Data coupling','Stamp coupling','Common coupling','Content coupling'],2,
+ ['Data coupling passes only needed values as parameters (the best kind).','Stamp coupling passes a whole structure when only part is needed.','Sharing global data = common coupling (undesirable).','Content coupling is when one module modifies another\'s internals (the worst).'],
+ 'Prefer data coupling; avoid common and content coupling.'],
+['d21','dev','What is the main idea of Continuous Integration (CI)?',
+ ['Developers merge changes frequently and every merge is built and tested automatically','The system is released once a year','Testing is done only by users','Documentation is written at the end'],0,
+ ['Frequent integration with automatic build and test finds problems early.','That is the opposite of continuous practice.','CI relies on automated tests run by the team.','Not related to CI.'],
+ 'CI = integrate often + automated build/test.'],
+/* MANAGEMENT (more) */
+['pm7','mgmt','Activity A takes 2 days. B (3 days) and C (5 days) both start after A. D (1 day) starts after BOTH B and C. What is the total float (slack) of activity B?',
+ ['0 days','2 days','3 days','5 days'],1,
+ ['B is not on the critical path, so its float is not zero.','Critical path A–C–D = 8 days; path A–B–D = 6 days → B can slip 8 − 6 = 2 days.','3 days is the duration of B, not its float.','5 days is the duration of C.'],
+ 'Float = critical path length − length of the path through the activity.'],
+['pm8','mgmt','Budget at completion (BAC) is 1,000 and the Cost Performance Index (CPI) is 0.8. If this performance continues, what is the Estimate at Completion (EAC = BAC ÷ CPI)?',
+ ['800','1,000','1,200','1,250'],3,
+ ['That multiplies BAC by CPI.','That assumes the project is on budget (CPI = 1).','Adding 20% (1 − 0.8) is wrong; the cost grows by a factor of 1 ÷ 0.8.','1,000 ÷ 0.8 = 1,250.'],
+ 'CPI < 1 → EAC > BAC.'],
+['pm9','mgmt','What is a Service Level Agreement (SLA)?',
+ ['A contract between provider and customer that defines the agreed service levels','A list of all software licences','A plan to recover from a disaster','A schedule of employee shifts'],0,
+ ['It states targets such as availability and response time.','That is a software asset register.','That is a business continuity plan.','Unrelated.'],
+ 'SLA = agreed service targets (and penalties).'],
+['pm10','mgmt','In IT service management, where are Configuration Items (CIs) and their relationships recorded?',
+ ['Service catalogue','CMDB','Incident log','Change calendar'],1,
+ ['The service catalogue lists the services offered.','The Configuration Management Database stores CIs and how they relate.','The incident log records incidents.','The change calendar schedules changes.'],
+ 'CMDB = configuration management database.'],
+['pm11','mgmt','Which chart shows each task as a horizontal bar along a time axis?',
+ ['Pareto chart','Gantt chart','Scatter diagram','Cause-and-effect diagram'],1,
+ ['Pareto ranks causes by frequency.','Gantt bars show start, finish and overlap of tasks.','A scatter diagram shows correlation.','A fishbone diagram shows causes of a problem.'],
+ 'Schedule bars → Gantt.'],
+['pm12','mgmt','Which quality-control tool ranks causes by frequency and shows a cumulative line so the few major causes stand out?',
+ ['Histogram','Pareto chart','Control chart','Scatter diagram'],1,
+ ['A histogram shows a distribution.','Pareto charts follow the 80/20 idea: a few causes produce most defects.','A control chart tracks a process over time against limits.','A scatter diagram shows the relation between two variables.'],
+ 'Pareto = vital few.'],
+['pm13','mgmt','A risk has a 20% probability and a 500,000 impact. What is its risk exposure (probability × impact)?',
+ ['25,000','100,000','250,000','500,000'],1,
+ ['That would be a 5% probability.','0.2 × 500,000 = 100,000.','That would be a 50% probability.','That is the impact alone.'],
+ 'Risk exposure = probability × impact.'],
+['pm14','mgmt','Which is the correct order of the system audit procedure?',
+ ['Audit plan → collect evidence → audit report → follow-up','Audit report → audit plan → collect evidence → follow-up','Collect evidence → follow-up → audit plan → report','Follow-up → plan → evidence → report'],0,
+ ['Plan the audit, gather and assess evidence, report findings, then check that recommendations are implemented.','A report cannot precede the evidence.','Evidence collection follows planning.','Follow-up is the last step.'],
+ 'Plan → evidence → report → follow-up.'],
+['pm15','mgmt','A system is estimated at 200 function points. Productivity is 10 FP per person-month. How many months does a team of 4 need (work divides evenly)?',
+ ['2.5','5','8','20'],1,
+ ['That would need 8 people.','200 ÷ 10 = 20 person-months; ÷ 4 people = 5 months.','Wrong division.','That is the effort in person-months, not the duration.'],
+ 'Effort ÷ team size = duration.'],
+['pm16','mgmt','What is a Work Breakdown Structure (WBS)?',
+ ['A hierarchical decomposition of the project scope into deliverables and work packages','A list of team members\' salaries','A chart of defect causes','A test plan'],0,
+ ['The WBS breaks the whole job into manageable parts.','Unrelated to project scope.','That is a fishbone diagram.','A test plan defines testing.'],
+ 'WBS = what must be delivered, broken down.'],
+['pm17','mgmt','In a RACI chart, which letter marks the person who is ultimately ANSWERABLE for the task being completed?',
+ ['R','A','C','I'],1,
+ ['R = Responsible: does the work.','A = Accountable: owns the outcome and approves it.','C = Consulted: gives input before decisions.','I = Informed: is told the result.'],
+ 'R does it, A answers for it.'],
+['pm18','mgmt','In business continuity planning, what does the RPO (Recovery Point Objective) specify?',
+ ['The maximum acceptable amount of data loss, expressed as time','The time allowed to restore the service','The cost of the recovery site','The number of backup tapes'],0,
+ ['RPO = how far back in time the restored data may be (e.g. 1 hour of data).','That is the RTO (Recovery Time Objective).','Cost is not part of the definition.','Backup media count is not an objective.'],
+ 'RPO = data loss; RTO = downtime.'],
+/* STRATEGY (more) */
+['st9','strat','An investment of 2,000,000 produces a net profit of 300,000 per year. What is the annual ROI?',
+ ['6.7%','15%','30%','150%'],1,
+ ['The ratio is inverted (2,000,000 ÷ 300,000 ≈ 6.7).','300,000 ÷ 2,000,000 = 15%.','30% would need a profit of 600,000.','150% would need a profit of 3,000,000.'],
+ 'ROI = profit ÷ investment.'],
+['st10','strat','In ABC analysis of inventory, which items are class A?',
+ ['A small number of items that make up most of the total value','Items that sell least often','The cheapest items','Items that are out of stock'],0,
+ ['A items are few but valuable, so they get the tightest control.','Sales frequency alone does not define class A.','Cheap items are usually class C.','Stock status is irrelevant.'],
+ 'ABC: A = few & valuable, C = many & cheap.'],
+['st11','strat','In a Balanced Scorecard, "customer satisfaction score" belongs to which perspective?',
+ ['Financial','Customer','Internal business process','Learning and growth'],1,
+ ['Financial uses profit, revenue and ROI.','Customer perspective: satisfaction, retention, market share.','Internal process: cycle time, defect rate.','Learning & growth: skills, training, innovation.'],
+ 'BSC: financial · customer · process · learning & growth.'],
+['st12','strat','Which of the following is NOT one of Porter\'s five forces?',
+ ['Threat of new entrants','Bargaining power of buyers','Threat of substitute products','Government subsidies'],3,
+ ['New entrants is one of the forces.','Buyer power is one of the forces.','Substitutes are one of the forces.','The five: rivalry, new entrants, substitutes, buyer power, supplier power. Subsidies are not one.'],
+ 'Five forces: rivalry, entrants, substitutes, buyers, suppliers.'],
+['st13','strat','Which intellectual property right protects a technical invention such as a new manufacturing method?',
+ ['Copyright','Patent','Trademark','Trade secret only'],1,
+ ['Copyright protects expressions such as programs and documents.','A patent protects an invention (a technical idea) for a limited period.','A trademark protects names and logos.','Trade secrets protect confidential know-how, but a patent is the right for inventions.'],
+ 'Invention → patent. Expression → copyright. Brand → trademark.'],
+['st14','strat','Sales are 800 and the cost of goods sold is 500. What is the gross profit?',
+ ['300','500','800','1,300'],0,
+ ['800 − 500 = 300.','That is the cost of goods sold.','That is the sales amount.','Adding instead of subtracting.'],
+ 'Gross profit = sales − cost of goods sold.'],
+['st15','strat','On a balance sheet, liabilities are 400 and equity is 600. What are the total assets?',
+ ['200','600','1,000','1,400'],2,
+ ['That is equity − liabilities.','That is equity alone.','Assets = liabilities + equity = 400 + 600.','That double counts the liabilities.'],
+ 'Assets = liabilities + equity.'],
+['st16','strat','Which Operations Research method finds the best allocation of limited resources when the objective and constraints are linear?',
+ ['Linear programming','Monte Carlo simulation','Queuing theory','Regression analysis'],0,
+ ['Maximise or minimise a linear objective subject to linear constraints.','Monte Carlo repeats random trials to estimate probabilities.','Queuing theory analyses waiting lines.','Regression fits a relation to data.'],
+ 'LP = optimise under linear constraints.'],
+['st17','strat','A project succeeds with probability 0.7 (profit 200) and otherwise fails (loss 100). What is its expected value?',
+ ['70','100','110','140'],2,
+ ['Check the weighting of the loss again.','This does not come from probability × payoff.','0.7 × 200 − 0.3 × 100 = 140 − 30 = 110.','That ignores the loss.'],
+ 'EV = Σ probability × payoff.'],
+['st18','strat','Which system is used to manage customer histories and contacts to improve customer loyalty?',
+ ['SCM','CRM','SFA only','MRP'],1,
+ ['SCM manages the supply chain.','Customer Relationship Management.','SFA is sales force automation, only a part of CRM.','MRP plans material requirements.'],
+ 'CRM = customers; SCM = supply chain.'],
+['st19','strat','In machine learning, training a model with input data paired with the correct answers (labels) is called:',
+ ['Supervised learning','Unsupervised learning','Reinforcement learning','Clustering'],0,
+ ['The labels act as a "teacher".','Unsupervised learning finds structure in unlabelled data.','Reinforcement learning learns from rewards.','Clustering is an unsupervised task.'],
+ 'Labelled data → supervised.'],
+['st20','strat','A company rents customer-management software over the Internet and does not manage servers or operating systems. Which cloud service model is this?',
+ ['IaaS','PaaS','SaaS','On-premises'],2,
+ ['IaaS provides virtual machines and storage.','PaaS provides a platform to develop and run applications.','SaaS delivers complete applications as a service.','On-premises means the company runs it itself.'],
+ 'IaaS infrastructure · PaaS platform · SaaS software.'],
+['st21','strat','Which international standard specifies requirements for an Information Security Management System (ISMS)?',
+ ['ISO 9001','ISO/IEC 27001','ISO 14001','ISO/IEC 20000'],1,
+ ['ISO 9001 is quality management.','ISO/IEC 27001 is the ISMS standard.','ISO 14001 is environmental management.','ISO/IEC 20000 is IT service management.'],
+ '27001 = security · 9001 = quality · 20000 = IT service · 14001 = environment.'],
+/* PSEUDOCODE (more) */
+['p10','pseudo',`What is output?<pre class="code">integer: n ← 5
+integer: f ← 1
+integer: i
+for (increase i from 2 to n by 1)
+  f ← f × i
+endfor
+output f</pre>`,
+ ['24','60','120','720'],2,
+ ['That is 4! — the loop runs up to n = 5, not 4.','That is 5 × 4 × 3, stopping early.','2 × 3 × 4 × 5 = 120 (this computes 5!).','That is 6!.'],
+ 'Trace f: 1 → 2 → 6 → 24 → 120.'],
+['p11','pseudo',`What is output?<pre class="code">integer: c ← 0
+integer: i
+for (increase i from 1 to 10 by 1)
+  if (i mod 3 = 0)
+    c ← c + 1
+  endif
+endfor
+output c</pre>`,
+ ['2','3','4','10'],1,
+ ['Missed one of the multiples.','The multiples of 3 in 1..10 are 3, 6 and 9.','10 is not a multiple of 3 and 12 is out of range.','That is the number of loop iterations.'],
+ 'Count the values where the condition is true, not the iterations.'],
+['p12','pseudo',`What is output?<pre class="code">integer: i ← 1
+integer: s ← 0
+while (s < 20)
+  s ← s + i
+  i ← i + 2
+endwhile
+output i</pre>`,
+ ['9','10','11','13'],2,
+ ['After the 4th pass s = 16 and i = 9, but 16 < 20 so the loop continues.','i only takes odd values (1, 3, 5, …).','5th pass: s = 16 + 9 = 25, i = 11. Now s ≥ 20, so the loop ends and i = 11 is printed.','That would need one more pass.'],
+ 'Make a table of s and i; check the condition BEFORE each pass.'],
+['p13','pseudo',`Array a = {3, 8, 2, 9, 4} (index starts at 1). What is output?<pre class="code">integer: sum ← 0
+integer: cnt ← 0
+integer: i
+for (increase i from 1 to 5 by 1)
+  sum ← sum + a[i]
+endfor
+for (increase i from 1 to 5 by 1)
+  if (a[i] × 5 > sum)
+    cnt ← cnt + 1
+  endif
+endfor
+output cnt</pre>`,
+ ['1','2','3','4'],1,
+ ['8 also exceeds the average of 5.2.','sum = 26, so the test is a[i] > 5.2 → only 8 and 9.','Too many; 4 is below 5.2.','Too many; only 8 and 9 are above the average.'],
+ 'a[i] × 5 > sum is the same as a[i] > average.'],
+['p14','pseudo',`Array a = {7, 3, 9, 3, 5} (index starts at 1). What is output?<pre class="code">integer: m ← 1
+integer: i
+for (increase i from 2 to 5 by 1)
+  if (a[i] < a[m])
+    m ← i
+  endif
+endfor
+output m</pre>`,
+ ['2','4','3','5'],0,
+ ['The first minimum (3) is at position 2; the strict < ignores the later equal 3.','This would be the answer for ≤, where the later equal value replaces m.','Position 3 holds 9, the maximum.','Position 5 holds 5.'],
+ 'm stores a POSITION, not a value. Strict < keeps the first minimum.'],
+['p15','pseudo',`How many times does the inner statement run?<pre class="code">integer: c ← 0
+integer: i
+integer: j
+for (increase i from 1 to 4 by 1)
+  for (increase j from i to 4 by 1)
+    c ← c + 1
+  endfor
+endfor
+output c</pre>`,
+ ['6','10','12','16'],1,
+ ['Too few; i = 1 alone gives 4 passes.','i = 1: 4, i = 2: 3, i = 3: 2, i = 4: 1 → 10.','That would need a different start for j.','16 would result if j always started at 1.'],
+ 'Inner loop starting at i gives a triangle: n(n + 1) ÷ 2.'],
+['p16','pseudo',`What is output? (string index starts at 1)<pre class="code">string: s ← "banana"
+integer: i
+integer: c ← 0
+for (increase i from 1 to 6 by 1)
+  if (s[i] = "a")
+    c ← c + i
+  endif
+endfor
+output c</pre>`,
+ ['3','6','12','21'],2,
+ ['That is the NUMBER of a letters, but c adds the positions.','Only the first two a positions (2 + 4) were added.','b1 a2 n3 a4 n5 a6 → 2 + 4 + 6 = 12.','That is the sum of every position 1 to 6.'],
+ 'c ← c + i adds the position, not 1.'],
+['p17','pseudo',`What is output?<pre class="code">integer: a ← 48
+integer: b ← 18
+integer: t
+while (b ≠ 0)
+  t ← a mod b
+  a ← b
+  b ← t
+endwhile
+output a</pre>`,
+ ['3','6','12','18'],1,
+ ['3 divides both numbers but it is not the greatest common divisor.','(48, 18) → (18, 12) → (12, 6) → (6, 0): the loop is Euclid\'s algorithm, gcd = 6.','12 is an intermediate value of b.','18 is the starting value of b.'],
+ 'This is Euclid\'s gcd, the same pattern as official Q7.'],
+['p18','pseudo',`What does g(3) return?<pre class="code">○ integer: g(integer: n)
+  if (n = 0)
+    return 0
+  endif
+  return n × n + g(n − 1)</pre>`,
+ ['6','9','14','36'],2,
+ ['That is 1 + 2 + 3 — the squares were forgotten.','That is only the first term, 3 × 3.','g(3) = 9 + g(2) = 9 + 4 + g(1) = 9 + 4 + 1 + g(0) = 14.','That is (1 + 2 + 3)².'],
+ 'Write down the call chain, then add the returns on the way back up.'],
+['p19','pseudo',`Queue operations: enqueue(4), enqueue(7), enqueue(1), dequeue(), enqueue(9), dequeue(). What are the FRONT element and the size now?`,
+ ['front 1, size 2','front 7, size 2','front 9, size 2','front 1, size 3'],0,
+ ['[4,7,1] → dequeue removes 4 → [7,1] → enqueue 9 → [7,1,9] → dequeue removes 7 → [1,9]. Front 1, size 2.','7 was removed by the second dequeue.','9 is the REAR, not the front.','Four values were added and two removed, so the size is 2, not 3.'],
+ 'FIFO: dequeue always removes from the front.'],
+['p20','pseudo',`Array a = {4, 2, 5, 1, 3}. After ONE bubble-sort pass, what is the array?<pre class="code">integer: j
+for (increase j from 1 to 4 by 1)
+  if (a[j] > a[j + 1])
+    swap a[j] and a[j + 1]
+  endif
+endfor</pre>`,
+ ['{2, 4, 1, 3, 5}','{1, 2, 3, 4, 5}','{2, 4, 5, 1, 3}','{4, 2, 1, 3, 5}'],0,
+ ['4↔2 → {2,4,5,1,3}; 4,5 no swap; 5↔1 → {2,4,1,5,3}; 5↔3 → {2,4,1,3,5}.','Fully sorting needs several passes.','Only the first swap was performed.','The first pair (4, 2) was left unswapped.'],
+ 'One pass moves the largest value to the end.'],
+['p21','pseudo',`Which expression fills the blank so that the loop computes the digit sum of n (for n = 123 the result must be 6)?<pre class="code">integer: s ← 0
+while (n > 0)
+  s ← s + ____
+  n ← integer part of (n ÷ 10)
+endwhile
+output s</pre>`,
+ ['n mod 10','n ÷ 10','n mod 2','n − 10'],0,
+ ['n mod 10 is the last digit: 3, then 2, then 1 → 6.','n ÷ 10 is used to remove the last digit, not to read it.','n mod 2 only tells odd/even.','Subtracting 10 does not isolate a digit.'],
+ 'Plug in the example: the blank must give 3, 2, 1 in turn.'],
+['p22','pseudo',`What is output?<pre class="code">integer: x ← 10
+if (x > 10)
+  output "A"
+elseif (x = 10)
+  output "B"
+else
+  output "C"
+endif
+if (x ≥ 10)
+  output "D"
+endif</pre>`,
+ ['B','BD','CD','ABD'],1,
+ ['The second, separate if also prints D.','First chain: x > 10 is false, x = 10 is true → B. Second if: 10 ≥ 10 → D.','C belongs to the else branch, which is skipped.','x > 10 is false, so A is not printed.'],
+ 'Boundary values: check = and ≥ carefully.'],
+['p23','pseudo',`Array a = {4, 9, 6, 9, 1} (index starts at 1). What is output?<pre class="code">integer: pos ← 0
+integer: i ← 1
+while (i ≤ 5 and pos = 0)
+  if (a[i] = 9)
+    pos ← i
+  endif
+  i ← i + 1
+endwhile
+output pos, i</pre>`,
+ ['2, 3','2, 4','4, 5','2, 6'],0,
+ ['i = 1: 4 ≠ 9, i → 2. i = 2: 9 found, pos = 2, i → 3. Now pos ≠ 0, so the loop stops: 2, 3.','i is incremented only once after the match.','The loop stops at the FIRST 9.','The loop does not run to the end once pos is set.'],
+ 'The loop condition is re-checked after i is incremented.'],
+['p24','pseudo',`What is output? (+ joins strings; the new digit is put in FRONT of r)<pre class="code">integer: n ← 13
+string: r ← ""
+while (n > 0)
+  r ← string(n mod 2) + r
+  n ← integer part of (n ÷ 2)
+endwhile
+output r</pre>`,
+ ['1011','1101','0111','1110'],1,
+ ['That would be the result if each digit were appended at the END (1, 0, 1, 1).','The remainders come out 1, 0, 1, 1, but each is placed in front: "1" → "01" → "101" → "1101".','The digits are in the wrong order.','The digits are in the wrong order.'],
+ 'Repeated ÷ 2 gives binary digits from the right; prepending fixes the order.'],
+['p25','pseudo',`Matrix m = {{2, 1, 3}, {4, 5, 6}, {7, 8, 9}} (m[row][column], index starts at 1). What is output?<pre class="code">integer: s ← 0
+integer: i
+for (increase i from 1 to 3 by 1)
+  s ← s + m[i][4 − i]
+endfor
+output s</pre>`,
+ ['12','15','16','45'],1,
+ ['This is not the sum of the visited cells.','m[1][3] + m[2][2] + m[3][1] = 3 + 5 + 7 = 15 (the anti-diagonal).','That is the main diagonal m[i][i]: 2 + 5 + 9.','That is the sum of ALL elements.'],
+ 'Write out the (row, column) pairs: (1,3), (2,2), (3,1).']
 ];
 
 const BANK = BANK_RAW.map(r => ({ id:r[0], t:r[1], q:r[2], o:r[3], a:r[4], w:r[5], tip:r[6], src:'original' }));
 
-/* Diagnostic: 14 questions spanning every topic */
-const DIAG_IDS = ['hw2','hw4','m1','m4','al1','al5','db2','db4','n2','s1','d5','pm1','st3','p2','p5','p9'];
+/* Diagnostic: a fresh random draw of DIAG_PER_TOPIC questions from every topic */
+const DIAG_PER_TOPIC = 2;
+const diagIds = () => TOPICS.flatMap(t => shuffle(BANK.filter(q => q.t === t.id).map(q => q.id)).slice(0, DIAG_PER_TOPIC));
 
 /* ---------- Official April 2026 paper ----------
    n: number, t: topic, d: e/m/h difficulty, g: paraphrased gist,
@@ -1921,7 +2581,7 @@ renderers.home = function(){
 
   let nt, nb, act;
   const miss = missedIds().length;
-  if (!S.diagDone) { nt = 'Take the diagnostic'; nb = '16 questions across every topic (~20 min). It shows where to spend your limited hours.'; act = () => startQuiz('diag'); }
+  if (!S.diagDone) { nt = 'Take the diagnostic'; nb = '20 questions across every topic (~25 min). It shows where to spend your limited hours.'; act = () => startQuiz('diag'); }
   else if (!pa.graded) { nt = 'Official Subject A, timed'; nb = 'Open the April 2026 Subject A PDF, start the 90-minute timer and bubble your answers.'; act = () => { go('paper'); openPaperTab('sheet'); setSheet('A'); }; }
   else if (!pb.graded) { nt = 'Official Subject B, timed'; nb = 'Open the Subject B PDF, start the 100-minute timer, and trace on paper.'; act = () => { go('paper'); openPaperTab('sheet'); setSheet('B'); }; }
   else if (miss) { nt = `Retry ${miss} missed question${miss > 1 ? 's' : ''}`; nb = 'Spaced repetition: redo what you got wrong until it sticks.'; act = () => startQuiz('retry'); }
@@ -2243,9 +2903,10 @@ $('#confuse-list').innerHTML = CONFUSIONS.map(c => `<div class="vs"><div class="
 
 /* ================= PRACTICE ================= */
 const MODES = [
- { id:'diag', title:'Diagnostic', icon:'target', desc:`${DIAG_IDS.length} questions, one or two per topic. Do this first.` },
+ { id:'diag', title:'Diagnostic', icon:'target', desc:`${TOPICS.length * DIAG_PER_TOPIC} questions, ${DIAG_PER_TOPIC} random per topic. Do this first.` },
+ { id:'quick', title:'Quick 10', icon:'clock', desc:'10 random questions from the whole bank. A different set every time.' },
  { id:'mock', title:'Mixed mock', icon:'mix', desc:'30 random questions from every topic. Timed: 90 s per question, 3 min per pseudocode question.' },
- { id:'subjb', title:'Subject B drill', icon:'code', desc:'All pseudocode tracing questions + a security scenario.' },
+ { id:'subjb', title:'Subject B drill', icon:'code', desc:'All pseudocode tracing questions + 3 random security questions.' },
  { id:'weak', title:'Weakest topic', icon:'bolt', desc:'Automatically picks your lowest-scoring topic.' },
  { id:'retry', title:'Retry missed', icon:'redo', desc:'Every practice question whose last attempt was wrong.' },
  { id:'all', title:'Everything', icon:'quiz', desc:`All ${BANK.length} practice questions, shuffled.` }
@@ -2279,9 +2940,10 @@ let QZ = null, QT = null;
 function startTopic(t){ startQuiz('topic', t); }
 function startQuiz(mode, topic){
   let ids, title;
-  if (mode === 'diag') { ids = shuffle(DIAG_IDS); title = 'Diagnostic'; }
+  if (mode === 'diag') { ids = shuffle(diagIds()); title = 'Diagnostic'; }
+  else if (mode === 'quick') { ids = shuffle(BANK.map(q => q.id)).slice(0, 10); title = 'Quick 10'; }
   else if (mode === 'mock') { ids = shuffle(BANK.map(q => q.id)).slice(0, 30); title = 'Mixed mock'; }
-  else if (mode === 'subjb') { ids = shuffle(BANK.filter(q => q.t === 'pseudo').map(q => q.id).concat('s8')); title = 'Subject B drill'; }
+  else if (mode === 'subjb') { ids = shuffle(BANK.filter(q => q.t === 'pseudo').map(q => q.id).concat(shuffle(BANK.filter(q => q.t === 'sec').map(q => q.id)).slice(0, 3))); title = 'Subject B drill'; }
   else if (mode === 'retry') { ids = shuffle(missedIds()); title = 'Retry missed'; if (!ids.length) { toast('Nothing to retry — no missed questions right now'); return; } }
   else if (mode === 'weak') {
     const w = weakTopics(); let t = w[0] && w[0].t.id;
